@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Activity Monitor</title>
+</head>
+<body>
+
+<h2>Activity Log</h2>
+<ul id="log"></ul>
+<button onclick="resetLog()">Reset</button>
+
+<script>
+let activities = [];
+
+function logActivity(type, detail) {
+  activities.push({ type, detail, time: new Date().toLocaleTimeString() });
+  display();
+}
+
+document.addEventListener("click", e => logActivity("Click", e.target.tagName), true);
+document.addEventListener("keydown", e => logActivity("Key", e.key));
+window.addEventListener("focus", () => logActivity("Focus", "Window"));
+
+function display() {
+  let ul = document.getElementById("log");
+  ul.innerHTML = "";
+  activities.forEach(a => {
+    ul.innerHTML += `<li>${a.time} - ${a.type} (${a.detail})</li>`;
+  });
+
+  if (activities.filter(a => a.type === "Click").length > 10) {
+    alert("Suspicious activity detected!");
+  }
+}
+
+function resetLog() {
+  activities = [];
+  display();
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Multi-Step Form</title>
+  <style>
+    .stage { display: none; }
+    #progress { width: 0; height: 20px; background: green; }
+  </style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<form>
+  <div class="stage">
+    <input placeholder="Name">
+  </div>
+
+  <div class="stage">
+    <input placeholder="Email">
+  </div>
+
+  <div class="stage">
+    <input placeholder="Age">
+  </div>
+
+  <div class="stage">
+    <input placeholder="Password">
+  </div>
+</form>
+
+<button onclick="next()">Next</button>
+
+<script>
+let stage = 0;
+const stages = document.querySelectorAll(".stage");
+
+function showStage() {
+  stages.forEach((s, i) => s.style.display = i === stage ? "block" : "none");
+  document.getElementById("progress").style.width =
+    ((stage + 1) / stages.length) * 100 + "%";
+}
+
+function next() {
+  let input = stages[stage].querySelector("input");
+  if (!input.value) {
+    alert("Complete this stage first");
+    return;
+  }
+  if (stage < stages.length - 1) stage++;
+  showStage();
+}
+
+showStage();
+</script>
+
+</body>
+</html>

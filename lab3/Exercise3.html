@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Survey Builder</title>
+</head>
+<body>
+
+<h2>Survey</h2>
+<form id="survey"></form>
+<button onclick="submitSurvey()">Submit</button>
+<p id="error"></p>
+
+<script>
+const questions = [
+  { text: "Name", type: "text", required: true },
+  { text: "Gender", type: "radio", options: ["Male", "Female"], required: true },
+  { text: "Skills", type: "checkbox", options: ["JS", "HTML"], min: 1 }
+];
+
+const form = document.getElementById("survey");
+
+questions.forEach((q, i) => {
+  let div = document.createElement("div");
+  div.innerHTML = `<p>${q.text}</p>`;
+
+  if (q.type === "text") {
+    div.innerHTML += `<input id="q${i}">`;
+  }
+
+  if (q.type === "radio") {
+    q.options.forEach(o => {
+      div.innerHTML += `<input type="radio" name="q${i}">${o}`;
+    });
+  }
+
+  if (q.type === "checkbox") {
+    q.options.forEach(o => {
+      div.innerHTML += `<input type="checkbox" name="q${i}">${o}`;
+    });
+  }
+
+  form.appendChild(div);
+});
+
+function submitSurvey() {
+  let error = document.getElementById("error");
+  error.textContent = "";
+
+  let name = document.getElementById("q0").value;
+  if (!name) {
+    error.textContent = "Please fill all required fields";
+    return;
+  }
+
+  alert("Survey Submitted");
+}
+</script>
+
+</body>
+</html>
