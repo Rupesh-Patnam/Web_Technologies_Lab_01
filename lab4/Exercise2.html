@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Product Search</title>
+<style>
+.product { border:1px solid #ccc; padding:10px; margin:5px; }
+</style>
+</head>
+<body>
+
+<h2>Live Product Search</h2>
+<input type="text" id="search" placeholder="Search product...">
+<div id="results"></div>
+
+<!-- JSON DATA INSIDE HTML -->
+<script type="application/json" id="productsData">
+{
+  "products": [
+    {"name":"Laptop","price":50000,"category":"Electronics"},
+    {"name":"Phone","price":20000,"category":"Electronics"},
+    {"name":"Shoes","price":3000,"category":"Fashion"},
+    {"name":"Watch","price":5000,"category":"Accessories"}
+  ]
+}
+</script>
+
+<script>
+let debounceTimer;
+
+const productsJSON = JSON.parse(
+    document.getElementById("productsData").textContent
+);
+
+document.getElementById("search").addEventListener("input", function(){
+
+    clearTimeout(debounceTimer);
+    const query = this.value.toLowerCase();
+
+    debounceTimer = setTimeout(() => {
+
+        const filtered = productsJSON.products.filter(p =>
+            p.name.toLowerCase().includes(query)
+        );
+
+        const resultsDiv = document.getElementById("results");
+        resultsDiv.innerHTML = "";
+
+        if(filtered.length === 0){
+            resultsDiv.innerHTML = "<p>No results found</p>";
+            return;
+        }
+
+        filtered.forEach(p => {
+            resultsDiv.innerHTML += `
+                <div class="product">
+                    <h3>${p.name}</h3>
+                    <p>Price: ₹${p.price}</p>
+                    <p>Category: ${p.category}</p>
+                </div>
+            `;
+        });
+
+    }, 500); // Debounce delay
+
+});
+</script>
+
+</body>
+</html>
