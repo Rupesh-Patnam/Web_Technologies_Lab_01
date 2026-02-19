@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Inventory System</title>
+<style>
+.low { color:red; font-weight:bold; }
+table, th, td { border:1px solid black; padding:5px; }
+</style>
+</head>
+<body>
+
+<h2>Product Inventory</h2>
+
+<form id="prodForm">
+ID:<input type="text" id="pid" required>
+Name:<input type="text" id="pname" required>
+Category:<input type="text" id="pcat" required>
+Price:<input type="number" id="pprice" required>
+Stock:<input type="number" id="pstock" required>
+<button type="submit">Add</button>
+</form>
+
+<br>
+Search by Category:
+<input type="text" id="searchCat" oninput="search()">
+
+<table>
+<thead>
+<tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Action</th></tr>
+</thead>
+<tbody id="prodTable"></tbody>
+</table>
+
+<h3>Total Inventory Value: ₹<span id="total"></span></h3>
+
+<script>
+let products=[];
+
+function display(list=products){
+    const table=document.getElementById("prodTable");
+    table.innerHTML="";
+    let total=0;
+
+    list.forEach((p,i)=>{
+        total+=p.price*p.stock;
+        table.innerHTML+=`
+        <tr class="${p.stock<5?'low':''}">
+        <td>${p.id}</td>
+        <td>${p.name}</td>
+        <td>${p.category}</td>
+        <td>${p.price}</td>
+        <td>${p.stock}</td>
+        <td><button onclick="del(${i})">Delete</button></td>
+        </tr>`;
+    });
+
+    document.getElementById("total").textContent=total;
+}
+
+document.getElementById("prodForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    products.push({
+        id:pid.value,
+        name:pname.value,
+        category:pcat.value,
+        price:Number(pprice.value),
+        stock:Number(pstock.value)
+    });
+    display();
+    this.reset();
+});
+
+function del(i){
+    products.splice(i,1);
+    display();
+}
+
+function search(){
+    const cat=searchCat.value.toLowerCase();
+    const filtered=products.filter(p=>p.category.toLowerCase().includes(cat));
+    display(filtered);
+}
+</script>
+
+</body>
+</html>
